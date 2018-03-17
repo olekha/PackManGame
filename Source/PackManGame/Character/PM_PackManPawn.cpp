@@ -6,7 +6,7 @@
 // Sets default values
 APM_PackManPawn::APM_PackManPawn()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SphereCollisionRoot = CreateDefaultSubobject<USphereComponent>(TEXT("Root"));
@@ -14,7 +14,6 @@ APM_PackManPawn::APM_PackManPawn()
 
 	PawnMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PawnMesh"));
 	PawnMesh->SetupAttachment(RootComponent);
-	//PawnMesh->SetRelativeLocation(FVector(.0f, .0f, .0f));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -52,12 +51,22 @@ void APM_PackManPawn::OnTuchReleased(ETouchIndex::Type index, FVector location)
 
 }
 
+bool APM_PackManPawn::CheckIsEnoughSlide(float first, float next)
+{
+	return (abs(first) - abs(next)) > minSlideSize;
+}
+
+void APM_PackManPawn::DefineDirection()
+{
+
+}
+
 // Called every frame
 void APM_PackManPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (!isTouch) {
-		UE_LOG(LogTemp, Log, TEXT("Touch : %f : %f"), touchDirection.X, touchDirection.Y);
+	if (isTouch)
+	{
 	}
 }
 

@@ -16,6 +16,15 @@
 
 #include "PM_PackManPawn.generated.h"
 
+UENUM(BlueprintType)
+enum class EDirectionEnum : uint8
+{
+	D_UP UMETA(DisplayName = "Up"),
+	D_DOWN UMETA(DisplayName = "Down"),
+	D_LEFT UMETA(DisplayName = "Left"),
+	D_RIGHT UMETA(DisplayName = "Right")
+};
+
 UCLASS()
 class PACKMANGAME_API APM_PackManPawn : public APawn
 {
@@ -27,13 +36,6 @@ public:
 
 	virtual void PossessedBy(AController* NewController);
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	void OnTuchPressed(ETouchIndex::Type index, FVector location);
-	void OnTuchReleased(ETouchIndex::Type index, FVector location);
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -41,16 +43,26 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
-	USphereComponent* SphereCollisionRoot;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category ="Pawn")
-	UStaticMeshComponent* PawnMesh;
+		USphereComponent* SphereCollisionRoot;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
-	USpringArmComponent* SpringArm;
+		UStaticMeshComponent* PawnMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
-	UCameraComponent* PlayerCamera;
+		USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pawn")
+		UCameraComponent* PlayerCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Controll")
+		float minSlideSize;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	void OnTuchPressed(ETouchIndex::Type index, FVector location);
+	void OnTuchReleased(ETouchIndex::Type index, FVector location);
 
 private:
 	FVector2D touchCoord;
@@ -60,4 +72,7 @@ private:
 	bool isTouch;
 
 	APlayerController* OwnerPlayerController;
+
+	bool CheckIsEnoughSlide(float first, float next);
+	void DefineDirection();
 };
